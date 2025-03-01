@@ -39,10 +39,13 @@ RUN curl -sOL $SASS_URL
 RUN tar -xzf dart-sass-${SASS_VERSION}-linux-x64.tar.gz
 
 # deploy-stage
-FROM alpine:3.14
+FROM ubuntu:20.04
 
-# Install required packages
-RUN apk add --no-cache ca-certificates curl libc6-compat
+RUN apt-get -y update \
+ && apt-get -y install \
+    ca-certificates \
+    curl \
+ && rm -rf /var/lib/apt/lists/*
 
 ENV STORAGE_PATH "/corteza/data"
 ENV CORREDOR_ADDR "corredor:80"
@@ -58,9 +61,6 @@ RUN mkdir -p /corteza/data
 
 COPY --from=build-stage /corteza ./
 COPY --from=build-stage /tmp/dart-sass /opt/dart-sass
-
-# Debugging: Verify webapp files
-RUN ls -l /corteza/webapp
 
 HEALTHCHECK --interval=30s --start-period=1m --timeout=30s --retries=3 \
     CMD curl --silent --fail --fail-early http://127.0.0.1:80/healthcheck || exit 1
