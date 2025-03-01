@@ -42,7 +42,7 @@ RUN tar -xzf dart-sass-${SASS_VERSION}-linux-x64.tar.gz
 FROM alpine:3.14
 
 # Install required packages
-RUN apk add --no-cache ca-certificates curl
+RUN apk add --no-cache ca-certificates curl libc6-compat
 
 ENV STORAGE_PATH "/corteza/data"
 ENV CORREDOR_ADDR "corredor:80"
