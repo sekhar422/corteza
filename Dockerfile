@@ -47,7 +47,7 @@ RUN apt-get -y update \
     curl \
  && rm -rf /var/lib/apt/lists/*
 
-ENV STORAGE_PATH "/data"
+ENV STORAGE_PATH "/corteza/data"
 ENV CORREDOR_ADDR "corredor:80"
 ENV HTTP_ADDR "0.0.0.0:80"
 ENV HTTP_WEBAPP_ENABLED "true"
@@ -56,7 +56,8 @@ ENV PATH "/opt/dart-sass:/corteza/bin:${PATH}"
 
 WORKDIR /corteza
 
-VOLUME /data
+# Create the data directory
+RUN mkdir -p /corteza/data
 
 COPY --from=build-stage /corteza ./
 COPY --from=build-stage /tmp/dart-sass /opt/dart-sass
